@@ -1,4 +1,5 @@
-import { verifyToken } from "../auth/tokenService";
+import { verifyToken } from "../auth/tokenService.js";
+import { HttpError } from "../src/utils/HttpError.js";
 
 export function authenticate(req, res, next) {
   const match = /^Bearer (\S+)$/i.exec(req.get("Authorization") ?? "");

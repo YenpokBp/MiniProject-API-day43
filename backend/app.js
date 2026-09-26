@@ -3,7 +3,7 @@ import cors from "cors";
 import courseRoutes from "./src/routes/course.routes.js";
 import categoryRoutes from "./src/routes/category.routes.js";
 import userRoutes from "./src/routes/user.routes.js";
-
+import authRoutes from "./src/routes/authRoutes.js";
 const app = express();
 
 // CORS middleware
@@ -18,5 +18,5 @@ app.get("/", (req, res) => {
 app.use("/api/courses", courseRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/practice/users", userRoutes);
-
+app.use("/api/auth", authRoutes);
 export default app;

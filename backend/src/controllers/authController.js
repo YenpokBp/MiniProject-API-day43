@@ -1,4 +1,6 @@
 import bcrypt from "bcryptjs";
+import { issueToken } from "../../auth/tokenService";
+import { HttpError } from "../utils/HttpError";
 
 export async function register(req, res) {
   const { name, email, password } = req.body;

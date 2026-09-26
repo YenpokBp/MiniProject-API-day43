@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JWT_EPIRES_IN, getJwtSecret } from "../src/config/auth";
+import { JWT_EXPIRES_IN, getJwtSecret } from "../src/config/auth.js";
 export function issueToken(userId) {
   return jwt.sign({ sub: String(userId) }, getJwtSecret(), {
     algorithm: "HS256",
