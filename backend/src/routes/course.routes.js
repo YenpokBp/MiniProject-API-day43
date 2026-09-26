@@ -6,9 +6,10 @@ import {
   updateCourse,
   deleteCourse,
 } from "../controllers/course.controller.js";
+import { authenticate } from "../../middlewares/authenticate.js";
 
 const router = express.Router();
-
+router.use(authenticate);
 router.get("/", getAllCourses);
 router.get("/:id", getCoursesById);
 router.post("/", createCourse);
