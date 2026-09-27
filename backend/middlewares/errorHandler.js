@@ -1,4 +1,4 @@
-import { HttpError } from "../src/utils/HttpError";
+import { HttpError } from "../src/utils/HttpError.js";
 
 // SUDAH DISEDIAKAN. Pesan parser mentah tidak diteruskan ke client.
 function normalizeParserError(err) {

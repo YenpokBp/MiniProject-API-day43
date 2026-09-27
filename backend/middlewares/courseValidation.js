@@ -1,5 +1,5 @@
 import { body, validationResult } from "express-validator";
-import { HttpError } from "../src/utils/HttpError";
+import { HttpError } from "../src/utils/HttpError.js";
 
 export const titleRules = () =>
   body("title")
@@ -71,16 +71,3 @@ export const courseValidationRules = [
   durationRules(),
   categoryIdRules(),
 ];
-
-export function validateCoursePayload(req, res, next) {
-  const result = validationResult(req);
-  if (result.isEmpty()) return next();
-
-  const errors = {};
-  for (const err of result.array()) {
-    if (!errors[err.path]) errors[err.path] = [];
-    errors[err.path].push(err.msg);
-  }
-
-  next(new HttpError(400, "Validasi gagal", errors));
-}
