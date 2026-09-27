@@ -1,5 +1,4 @@
-import { body, validationResult } from "express-validator";
-import { HttpError } from "../src/utils/HttpError.js";
+import { body } from "express-validator";
 
 export const titleRules = () =>
   body("title")
@@ -62,6 +61,22 @@ export const categoryIdRules = () =>
     .bail()
     .isInt({ min: 1 })
     .withMessage("Kategori tidak valid.");
+
+export const kuotaRules = () =>
+  body("kuota")
+    .notEmpty()
+    .withMessage("Kuota wajib diisi.")
+    .bail()
+    .isInt({ min: 1 })
+    .withMessage("Kuota harus berupa angka bulat lebih dari 0.");
+
+export const hargaRules = () =>
+  body("harga")
+    .notEmpty()
+    .withMessage("Harga wajib diisi.")
+    .bail()
+    .isFloat({ min: 0 })
+    .withMessage("Harga minimal 0.");
 
 export const courseValidationRules = [
   titleRules(),

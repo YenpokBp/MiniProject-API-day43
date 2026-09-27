@@ -14,8 +14,6 @@ import { validateRequest } from "../../middlewares/validateRequest.js";
 const router = express.Router();
 router.get("/", getAllCourses);
 router.get("/:id", validateId, validateRequest, getCoursesById);
-router.get("/", getAllCourses);
-router.get("/:id", validateId, validateRequest, getCoursesById);
 router.post(
   "/",
   authenticate,

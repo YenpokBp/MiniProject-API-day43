@@ -48,7 +48,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"yendy\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123#\"\r\n}",
+              "raw": "{\r\n  \"name\": \"yendy\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -109,7 +109,65 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"email\": \"yendy@mail.com\",\r\n  \"password\": \"password123#\"\r\n}",
+              "raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Gagal",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Login gagal, status 401\", () => {\r",
+                  "  pm.response.to.have.status(401);\r",
+                  "});\r",
+                  "pm.test(\"Pesan error sesuai\", () => {\r",
+                  "  const body = pm.response.json();\r",
+                  "  pm.expect(body.success).to.equal(false);\r",
+                  "  pm.expect(body.message).to.equal(\"Email atau password salah.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"password_salah\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -135,7 +193,7 @@
       "name": "Products",
       "item": [
         {
-          "name": "Read All Product",
+          "name": "Read All Course",
           "event": [
             {
               "listen": "test",
@@ -177,29 +235,29 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/products",
+              "raw": "{{base_url}}/courses",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "products"
+                "courses"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Create Product",
+          "name": "Create Course",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
                   "const body = pm.response.json();\r",
-                  "pm.test(\"product berhasil dibuat\", () => {\r",
+                  "pm.test(\"Course berhasil dibuat\", () => {\r",
                   "    pm.response.to.have.status(201);\r",
                   "})\r",
-                  "pm.environment.set(\"product_id\", body.id || body.data?.id)"
+                  "pm.environment.set(\"course_id\", body.id || body.data?.id)"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -222,7 +280,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Keyboard\",\r\n    \"price\": 100000,\r\n    \"description\": \"Keyboard bagus\"\r\n}",
+              "raw": "{\r\n  \"title\": \"Belajar Node.js Dasar\",\r\n  \"description\": \"Kursus pengenalan Express dan MySQL untuk pemula.\",\r\n  \"rating\": 8.5,\r\n  \"level\": \"beginner\",\r\n  \"duration\": 120,\r\n  \"category_id\": 1,\r\n  \"kuota\": 30,\r\n  \"harga\": 150000\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -230,28 +288,76 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/products",
+              "raw": "{{base_url}}/courses",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "products"
+                "courses"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Update Product",
+          "name": "Create Course tanpa token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ditolak tanpa token, status 401\", () => {\r",
+                  "  pm.response.to.have.status(401);\r",
+                  "});\r",
+                  "pm.test(\"Pesan sesuai\", () => {\r",
+                  "  const body = pm.response.json();\r",
+                  "  pm.expect(body.message).to.equal(\"Silahkan login dengan token yang valid\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Belajar Node.js Dasar\",\r\n  \"description\": \"Kursus pengenalan Express dan MySQL untuk pemula.\",\r\n  \"rating\": 8.5,\r\n  \"level\": \"beginner\",\r\n  \"duration\": 120,\r\n  \"category_id\": 1,\r\n  \"kuota\": 30,\r\n  \"harga\": 150000\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/courses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "courses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
                   "const body = pm.response.json();\r",
-                  "pm.test(\"product berhasil diubah\", () => {\r",
+                  "pm.test(\"Course berhasil diubah\", () => {\r",
                   "    pm.response.to.have.status(200);\r",
-                  "    pm.expect(body.data.name).to.equal(\"Keyboard edit\");\r",
+                  "    pm.expect(body.data.title).to.equal(\"Belajar Node.js Lanjutan\");\r",
                   "})\r",
                   " "
                 ],
@@ -276,7 +382,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Keyboard edit\",\r\n    \"price\": 100000,\r\n    \"description\": \"Keyboard bagus\"\r\n}",
+              "raw": "{\r\n  \"title\": \"Belajar Node.js Lanjutan\",\r\n  \"description\": \"Kursus pengenalan Express dan MySQL untuk pemula, direvisi.\",\r\n  \"rating\": 9,\r\n  \"level\": \"intermediate\",\r\n  \"duration\": 150,\r\n  \"category_id\": 1,\r\n  \"kuota\": 25,\r\n  \"harga\": 175000\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -284,74 +390,20 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
+              "raw": "{{base_url}}/courses/{{course_id}}",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "products",
-                "{{product_id}}"
+                "courses",
+                "{{course_id}}"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete Product",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const body = pm.response.json();\r",
-                  "pm.test(\"product berhasil dihapus\", () => {\r",
-                  "    pm.response.to.have.status(204);\r",
-                  "})\r",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Keyboard\",\r\n    \"price\": 100000,\r\n    \"description\": \"Keyboard bagus\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "products",
-                "{{product_id}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Read Product Detail",
+          "name": "Read Course Detail",
           "event": [
             {
               "listen": "test",
@@ -362,16 +414,15 @@
                   "})\r",
                   "\r",
                   "const body = pm.response.json();\r",
-                  "const product_id = pm.environment.get(\"product_id\");\r",
+                  "const course_id = pm.environment.get(\"course_id\");\r",
                   "\r",
-                  "pm.test('Response memiliki data product', () => {\r",
+                  "pm.test('Response memiliki data Course', () => {\r",
                   "    pm.expect(body).to.have.property('data');\r",
                   "    pm.expect(body.data).to.have.property('id');\r",
-                  "    pm.expect(body.data).to.have.property('name');\r",
-                  "    pm.expect(body.data).to.have.property('price');\r",
+                  "    pm.expect(body.data).to.have.property('title');\r",
+                  "    pm.expect(body.data).to.have.property('harga');\r",
                   "    pm.expect(body.data).to.have.property('description');\r",
-                  "\r",
-                  "    pm.expect(body.data.id).to.equal(product_id);\r",
+                  "    pm.expect(String(body.data.id)).to.equal(String(course_id));\r",
                   "})"
                 ],
                 "type": "text/javascript",
@@ -409,16 +460,131 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Keyboard\",\r\n    \"price\": 100000,\r\n    \"description\": \"Keyboard bagus\"\r\n}"
+              "raw": ""
             },
             "url": {
-              "raw": "{{base_url}}/products/{{product_id}}",
+              "raw": "{{base_url}}/courses/{{course_id}}",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "products",
-                "{{product_id}}"
+                "courses",
+                "{{course_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Read Course (tidak ditemukan)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"ID bukan angka, status 400\", () => {\r",
+                  "  pm.response.to.have.status(400);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/abc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "courses",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test(\"Course berhasil dihapus\", () => {\r",
+                  "    pm.response.to.have.status(204);\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/{{course_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "courses",
+                "{{course_id}}"
               ]
             }
           },

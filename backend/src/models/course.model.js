@@ -3,7 +3,7 @@ import db from "../config/database.js";
 const BASE_SELECT = `
   SELECT 
     c.id, c.title, c.description, c.rating, c.thumbnail,
-    c.level, c.duration, c.status, c.category_id, c.user_id,
+    c.level, c.duration, c.status, c.kuota, c.harga, c.category_id, c.user_id,
     u.id AS instructor_id, u.nama AS instructor_name,
     cc.id AS category_id, cc.name AS category_name,
     COUNT(e.id) AS enrolled_count
@@ -68,10 +68,12 @@ export async function insertCourse({
   userId,
   status,
   thumbnail,
+  kuota,
+  harga,
 }) {
   const [result] = await db.query(
-    `INSERT INTO courses (title, description, rating, level, duration, category_id, user_id, status, thumbnail)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO courses (title, description, rating, level, duration, category_id, user_id, status, thumbnail, kuota, harga)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       title,
       description,
@@ -82,6 +84,8 @@ export async function insertCourse({
       userId,
       status || "draft",
       thumbnail || null,
+      kuota,
+      harga,
     ],
   );
   return result.insertId;
@@ -98,10 +102,12 @@ export async function updateCourseById(
     category_id,
     status,
     thumbnail,
+    kuota,
+    harga,
   },
 ) {
   await db.query(
-    `UPDATE courses SET title = ?, description = ?, rating = ?, level = ?, duration = ?, category_id = ?, status = ?, thumbnail = ?
+    `UPDATE courses SET title = ?, description = ?, rating = ?, level = ?, duration = ?, category_id = ?, status = ?, thumbnail = ?, kuota = ?, harga = ?
      WHERE id = ?`,
     [
       title,
@@ -112,6 +118,8 @@ export async function updateCourseById(
       category_id,
       status || "draft",
       thumbnail || null,
+      kuota,
+      harga,
       id,
     ],
   );
