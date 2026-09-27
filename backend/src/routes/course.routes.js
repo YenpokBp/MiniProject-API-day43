@@ -7,10 +7,7 @@ import {
   deleteCourse,
 } from "../controllers/course.controller.js";
 import { authenticate } from "../../middlewares/authenticate.js";
-import {
-  courseValidationRules,
-  validateCoursePayload,
-} from "../../middlewares/courseValidation.js";
+import { courseValidationRules } from "../../middlewares/courseValidation.js";
 import { validateId } from "../../middlewares/validateId.js";
 import { validateRequest } from "../../middlewares/validateRequest.js";
 

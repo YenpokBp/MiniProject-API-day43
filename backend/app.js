@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.use(errorHandler);
+
 app.get("/", (req, res) => {
   res.send("Server layanan siap");
 });
@@ -20,4 +20,5 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/practice/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use(errorHandler);
 export default app;

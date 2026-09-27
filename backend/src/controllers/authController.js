@@ -1,6 +1,9 @@
 import bcrypt from "bcryptjs";
 import { issueToken } from "../../auth/tokenService.js";
 import { HttpError } from "../utils/HttpError.js";
+import { createUser, findUserByEmail } from "../models/user.model.js";
+
+const DUMMY_HASH = bcrypt.hashSync("dummy-untuk-mencegah-timing-attack", 10);
 
 export async function register(req, res) {
   const { name, email, password } = req.body;
@@ -16,10 +19,7 @@ export async function register(req, res) {
 export async function login(req, res) {
   const { email, password } = req.body;
   const user = await findUserByEmail(email);
-  const valid = await bcrypt.compare(
-    password,
-    user?.password_hash ?? DUMMY_HASH,
-  );
+  const valid = await bcrypt.compare(password, user?.password ?? DUMMY_HASH);
   if (!user || !valid) throw new HttpError(401, "Email atau password salah.");
   const token = issueToken(user.id);
   res.json({
